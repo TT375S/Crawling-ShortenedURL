@@ -1,3 +1,0 @@
-
-Checking for mac64 chromedriver:2.32 in cache
-Driver found in /Users/user1/.wdm/chromedriver/2.32/chromedriver
