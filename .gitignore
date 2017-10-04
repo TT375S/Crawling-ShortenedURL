@@ -2,3 +2,7 @@
 *.DS_Store
 *.txt
 *.text
+headlessTest.py
+test-scr.py
+twitterCrawl-tinyurl.py
+githubCrawler.py
