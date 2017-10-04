@@ -40,6 +40,7 @@ for length in range(3, 10):
         #url = "http://goo.gl/" + "".join(challengeText) +"+"
         url = "https://goo.gl/#analytics/goo.gl/"+ "".join(challengeText) +"/all_time"
         driver.get(url)
+        time.sleep(0.5)
         print(url, file=sys.stderr)
         html = driver.page_source
         
@@ -50,5 +51,4 @@ for length in range(3, 10):
         #print(html)
         #print(url)
         #Avoid "Too many request" error.
-        time.sleep(0.05)
 driver.quit()
