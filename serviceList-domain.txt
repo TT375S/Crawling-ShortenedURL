@@ -1,3 +1,4 @@
+tinyurl.com
 bit.ly
 goo.gl
 is.gd
@@ -11,8 +12,6 @@ urx.nu
 tiny.cc
 ow.ly
 bit.do
-tinyurl.com
-tinyurl.com
 soo.gd
 www.s2r.co
 bc.vc

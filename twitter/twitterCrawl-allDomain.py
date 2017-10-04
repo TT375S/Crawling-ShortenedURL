@@ -26,25 +26,21 @@ try:
         url = 'https://twitter.com/search?q='+ urllib.parse.quote(targetWord) +'&src=typd' 
         driver.get(url)
         print(url, file=sys.stderr)
-        #input = driver.find_element_by_name('q')
-        #input.send_keys('Python')
-        #input.send_keys(Keys.RETURN)
 
-        #show HTML
-        #print(driver.page_source)
-
+        #twitter search screen can be scrolled limitelessly.
         scrollToY = 0
         hitCount = 0
         for i in range(0, 20):
             #scroll
-            #print(driver.page_source)
             driver.execute_script("window.scrollTo(0,"+ str(scrollToY) +")")
             scrollToY += 4000
+            #wait loading
             time.sleep(1)
             driver.save_screenshot('result_'+ targetWord  + str(i)  +'.png')
             
         #print(driver.page_source)
 
+        #search short URLs
         urls = re.findall(targetWord + '/[0-9a-zA-Z]+', driver.page_source)
         stripDupUrls = set(urls)
         hitCount += len(urls)
