@@ -11,4 +11,4 @@ On my Mac, all dependencies are installed by this command.
 And get GoogleChrome v.59 or later from [here](https://www.google.com/chrome/browser/desktop/index.html).  
 
 ## Usage
-`$ pyhton3 twitter githubCrawler-headless.py < ../serviceList-domain.txt`
+`$ pyhton3 githubCrawler-headless.py < ../serviceList-domain.txt`

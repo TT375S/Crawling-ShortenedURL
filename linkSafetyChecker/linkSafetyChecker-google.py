@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+#TODO: refactoring
+
 import time
 import urllib.parse
 import re
@@ -20,12 +22,6 @@ headers = {"Content-Type" : "application/json"}
 
 try:
     while(1):
-        url = input()
-        print(url, file=sys.stderr)
-        #validation URL form
-        if  len(re.findall('(https?:\/\/)[^\s ]+' , url)) <= 0:
-            continue
-        urlCount += 1
         
         obj = {
             "client": {
@@ -37,12 +33,29 @@ try:
                 "platformTypes":    ["WINDOWS"],
                 "threatEntryTypes": ["URL"],
                 "threatEntries": [
-                    {"url": url},
-                    {"url": "http://www.urltocheck2.org/"},
-                    {"url": "http://www.urltocheck3.com/"}
+                    #{"url": "http://aaa"},
+                    #{"url": "http://bbb"}
                 ]
             }
         }
+
+        #Google Safe Brawsing accepts 500 url query per 1 request.
+        lineCount = 0
+        while lineCount < 500:
+            try:
+                url = input()
+            except EOFError:
+                break
+            print(url, file=sys.stderr)
+            
+            #validation URL form
+            if  len(re.findall('(https?:\/\/)[^\s ]+' , url)) <= 0:
+                continue
+            urlCount += 1
+        
+            (obj["threatInfo"])["threatEntries"].append({"url": url})
+            lineCount += 1
+
 
         json_data = json.dumps(obj).encode("utf-8")
 
@@ -51,8 +64,11 @@ try:
         try:
             with urllib.request.urlopen(request) as response:
                 body = response.read().decode('utf-8') 
-                print(body)
-
+                #URL is unsafe!!!
+                if "threat" in body:
+                    print(body)
+            if lineCount != 500:
+                exit()
         except urllib.error.HTTPError:
             print("404",file=sys.stderr)
 except EOFError:
