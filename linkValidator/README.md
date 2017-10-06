@@ -1,4 +1,4 @@
-#Link validetor 
+# Link validetor 
 Conform a short url link is valid or not, and the link destination is alive or not.
 
 ## Installation
