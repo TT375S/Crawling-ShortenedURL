@@ -15,6 +15,11 @@ import sys
 # run chrome headless
 options = Options()
 options.add_argument('--headless')
+#?
+options.add_argument('--disable-gpu')
+#do not load image
+options.add_argument('--blink-settings=imagesEnabled=false')
+
 # install chromedriver if not found and start chrome
 driver = SeleneDriver.wrap(webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=options))
 
@@ -36,10 +41,10 @@ try:
             scrollToY += 4000
             #wait loading
             time.sleep(1)
-            driver.save_screenshot('result_'+ targetWord  + str(i)  +'.png')
+            #driver.save_screenshot('result_'+ targetWord  + str(i)  +'.png')
             
         #print(driver.page_source)
-
+        time.sleep(1)
         #search short URLs
         urls = re.findall(targetWord + '/[0-9a-zA-Z]+', driver.page_source)
         stripDupUrls = set(urls)
