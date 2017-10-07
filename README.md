@@ -3,6 +3,34 @@ Crawling twitter, github, etc… and collection short URL.
 
 For more details, see README.md in each directories of crawler.  
 
+# Installation
+Need Python3 and selenium, and GoogleChrome.  
+## For Mac
+
+Install python3.  
+`$ brew install python3`  
+  
+On my Mac, all dependencies are installed by this command.  
+`$ pip3 install selenium`  
+  
+Install Google Chrome.<https://www.google.com/chrome/browser/desktop/index.html>  
+  
+Clone this repository.  
+`$ git clone https://github.com/TT375S/Crawling-ShortenedURL.git`   
+
+## For Ubuntu
+Install python3.  
+`$ sudo apt install python3`  
+Install pip3.  
+`$ sudo apt install python3-pip`  
+Install latest version selene.  
+`$sudo apt install --upgrade selene --pre`  
+  
+Install Google Chrome.<https://www.google.com/chrome/browser/desktop/index.html>  
+  
+Clone this repository.  
+`$ git clone https://github.com/TT375S/Crawling-ShortenedURL.git`   
+
 # Example Usage
 Collect short URL from twitter.  
 
