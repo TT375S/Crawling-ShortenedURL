@@ -24,7 +24,7 @@ Install python3.
 Install pip3.  
 `$ sudo apt install python3-pip`  
 Install latest version selene.  
-`$sudo apt install --upgrade selene --pre`  
+`$sudo pip3 install --upgrade selene --pre`  
   
 Install Google Chrome.<https://www.google.com/chrome/browser/desktop/index.html>  
   
