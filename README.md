@@ -10,8 +10,16 @@ Need Python3 and selenium, and GoogleChrome.  
 Install python3.  
 `$ brew install python3`  
   
-On my Mac, all dependencies are installed by this command.  
-`$ pip3 install selenium`  
+
+Install pip3.  
+`$ sudo apt install python3-pip`  
+  
+~~On my Mac, all dependencies are installed by this command.~~  
+Install selenium.  
+`$ pip3 install selenium`  
+  
+Install latest version selene.  
+`$sudo pip3 install --upgrade selene --pre`  
   
 Install Google Chrome.<https://www.google.com/chrome/browser/desktop/index.html>  
   
