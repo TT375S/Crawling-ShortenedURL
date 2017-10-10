@@ -16,6 +16,7 @@ APIKey = sys.argv[1]
 cx = "008233123352770001943:xjszb8ktj00"
 
 maxPage = 3
+maxItems = 10
 
 domainNames = []
 try:
@@ -25,8 +26,8 @@ except EOFError:
     pass
 
 for domainName in domainNames:        
-    for page in range(1,maxPage+1):
-        searchApiURL = "https://www.googleapis.com/customsearch/v1?key=" + APIKey + "&cx=" + cx + "&q=" + domainName + "&hl=ja&start="+ str(page) +"&num=10"
+    for page in range(0,maxPage):
+        searchApiURL = "https://www.googleapis.com/customsearch/v1?key=" + APIKey + "&cx=" + cx + "&q=" + domainName + "&hl=ja&start="+ str(1+ page * maxItems ) +"&num="+str(maxItems)
         try:
             with urllib.request.urlopen(urllib.parse.quote_plus(searchApiURL, "/:?=&") ) as response:
                 body = response.read().decode('utf-8') 
