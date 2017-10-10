@@ -16,11 +16,13 @@ _404count = 0
 
 try:
     while(1):
-        url = "http://" + input()
-        print(url, file=sys.stderr)
+        domain = input()
         #validation URL form
-        if  len(re.findall('(?:https?:\/\/|)[^\s ]+\/[0-9a-zA-Z]*' , url)) <= 0:
+        if  len(re.findall('(?:https?:\/\/|)[^\s ]+\/[0-9a-zA-Z]*' , domain)) <= 0:
             continue
+
+        url = "http://" + domain
+        print(url, file=sys.stderr)
 
         urlCount += 1
 
@@ -32,10 +34,9 @@ try:
             }
         )
 
+        #request
         try:
-            #with urllib.request.urlopen(urllib.parse.quote_plus(url, "/:?=&")) as response:
             with urllib.request.urlopen(req) as response:
-                #html = response.read().decode('utf-8') 
                 print(response.geturl())
                 validURLcount += 1
         except urllib.error.HTTPError:
