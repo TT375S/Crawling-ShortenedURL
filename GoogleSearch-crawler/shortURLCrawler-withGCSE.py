@@ -17,27 +17,37 @@ cx = "008233123352770001943:xjszb8ktj00"
 
 maxPage = 3
 
+domainNames = []
 try:
     while(1):
-        keyword_domainName = input()
-        
-        for page in range(1,maxPage+1):
-            searchApiURL = "https://www.googleapis.com/customsearch/v1?key=" + APIKey + "&cx=" + cx + "&q=" + keyword_domainName + "&hl=ja&start="+ str(page) +"&num=10"
-            try:
-                with urllib.request.urlopen(urllib.parse.quote_plus(searchApiURL, "/:?=&") ) as response:
-                    body = response.read().decode('utf-8') 
-                    print(body)
-                    #convert array and dictionary
-                    resultJson = json.load(body)
-                    #checking all items
-                    for item in resultJson["items"]:
-                        snippet = item["snippet"]
-                        #collecting all URL
-                        urls = re.findall('(?:https?:\/\/|)'+ keyword_domainName  +'\/[0-9a-zA-Z]*' , snippet)
-                        for url in urls:
-                            print(url)
-                                    
-            except urllib.error.HTTPError:
-                print("404",file=sys.stderr)
+        domainNames.append(input())
 except EOFError:
     pass
+
+for domainName in domainNames:        
+    for page in range(1,maxPage+1):
+        searchApiURL = "https://www.googleapis.com/customsearch/v1?key=" + APIKey + "&cx=" + cx + "&q=" + domainName + "&hl=ja&start="+ str(page) +"&num=10"
+        try:
+            with urllib.request.urlopen(urllib.parse.quote_plus(searchApiURL, "/:?=&") ) as response:
+                body = response.read().decode('utf-8') 
+                print(body)
+                #convert array and dictionary
+                resultJson = json.load(body)
+                #checking all items
+                for item in resultJson["items"]:
+                    snippet = item["snippet"]
+                    #collecting all URL
+                    urls = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]*' , snippet)
+                    for url in urls:
+                        print(url)
+                try:    
+                    #Finding urls in the "item" site.
+                    with urllib.request.urlopen(urllib.parse.quote_plus(item["formattedUrl"], "/:?=&") ) as response:
+                        body = response.read().decode('utf-8') 
+                        urls = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]*' , snippet)
+                        for url in urls:
+                            print(url) 
+                except urllib.error.HTTPError:
+                    print("404", file=sys.stderr)       
+        except urllib.error.HTTPError:
+            print("404",file=sys.stderr)
