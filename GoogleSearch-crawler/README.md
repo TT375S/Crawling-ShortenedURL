@@ -1,5 +1,5 @@
 # short URL collector from Google Custom Search
-Collection short URL with Google custom search APIn.
+A program collects short URL with Google custom search API.
 
 Input short URL service's domain names. They are listed in "serviceList-domain.txt". So, input the file with redirection.  
 Then, this program search by the domain names with GoogleCustomSearch.  
