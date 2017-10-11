@@ -15,7 +15,7 @@ APIKey = sys.argv[1]
 #search from twitter
 cx = "008233123352770001943:xjszb8ktj00"
 
-maxPage = 3
+maxPage = 1
 maxItems = 10
 
 domainNames = []
@@ -31,24 +31,26 @@ for domainName in domainNames:
         try:
             with urllib.request.urlopen(urllib.parse.quote_plus(searchApiURL, "/:?=&") ) as response:
                 body = response.read().decode('utf-8') 
-                print(body)
+                print(body, file=sys.stderr)
                 #convert array and dictionary
-                resultJson = json.load(body)
+                resultJson = json.loads(body)
                 #checking all items
                 for item in resultJson["items"]:
                     snippet = item["snippet"]
                     #collecting all URL
-                    urls = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]*' , snippet)
+                    urls = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]+' , snippet)
                     for url in urls:
-                        print(url)
-                try:    
-                    #Finding urls in the "item" site.
-                    with urllib.request.urlopen(urllib.parse.quote_plus(item["formattedUrl"], "/:?=&") ) as response:
-                        body = response.read().decode('utf-8') 
-                        urls = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]*' , snippet)
-                        for url in urls:
-                            print(url) 
-                except urllib.error.HTTPError:
-                    print("404", file=sys.stderr)       
+                        print(url.replace("https://", "").replace("http://", "") )
+                    
+                    try:    
+                        #Finding urls in the "item" site.
+                        with urllib.request.urlopen(urllib.parse.quote_plus(item["link"], "/:?=&") ) as response:
+                            body = response.read().decode('utf-8') 
+                            urls = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]+' , body)
+                            for url in urls:
+                                print(url.replace("https://", "").replace("http://", "") )
+                    
+                    except urllib.error.HTTPError:
+                        print("404", file=sys.stderr)       
         except urllib.error.HTTPError:
             print("404",file=sys.stderr)
