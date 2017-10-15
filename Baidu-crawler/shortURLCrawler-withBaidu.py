@@ -11,6 +11,13 @@ import urllib.error
 import urllib.parse
 import json
 
+from selenium import webdriver
+from selenium.webdriver import Chrome
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+from selene.driver import SeleneDriver
+from webdriver_manager.chrome import ChromeDriverManager
+
 from bs4 import BeautifulSoup
 
 #https://qiita.com/zarchis/items/3258562ebc9570fa05a3
@@ -35,6 +42,12 @@ def conv_encoding(data):
 maxPage = 1
 maxItems = 10
 
+# run chrome headless
+options = Options()
+options.add_argument('--headless')
+# install chromedriver if not found and start chrome
+driver = SeleneDriver.wrap(webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=options))
+
 domainNames = []
 #Input target short url service's domain names.
 try:
@@ -45,41 +58,37 @@ except EOFError:
 
 for domainName in domainNames:        
     for page in range(1,maxPage+1):
-        time.sleep(1)
+        #time.sleep(1)
 
         #TODO:(What is the "rsv_pq" query parameter? Is it somthing like session-id?)
         searchURL = "http://www.baidu.com/s?wd=tinyurl.com&pn=" +str(page)+"&oq="  +domainName+"/" +"&ie=utf-8&usm=1&rsv_idx=1&rsv_pq=d7aa019b0002a564&rsv_t=b33dQMjJmCQStNYNt4kMjLoJ58nJKp3tISWBSXPeMIFMT8EeFwLkoEVNNjc"
-        try:
-            with urllib.request.urlopen(urllib.parse.quote_plus(searchURL, "/:?=&") ) as response:
-                html = response.read().decode('utf-8')
-                #print(html, file=sys.stderr)
+
+        driver.get(searchURL)
+        time.sleep(1.0)
                 
-                #Converting soup object.
-                soup = BeautifulSoup(html, "html.parser")
-                searchResults = soup.find_all(class_ = "result c-container ")
+        html = driver.page_source
+        #print(html, file=sys.stderr)
+        
+        #Converting soup object.
+        soup = BeautifulSoup(html, "html.parser")
+        searchResults = soup.find_all(class_ = "result c-container ")
+       
+        #Checking each search result items.
+        for searchResult in searchResults:
+            linkURL = (searchResult.find("a")).get("href")
+            print(linkURL)
+            try:
+                #Finding urls in the search result web site.
+                driver.get(linkURL)
+                time.sleep(1)
                 
-                #Checking each search result items.
-                for searchResult in searchResults:
-                    linkURL = (searchResult.find("a")).get("href")
-                    print(linkURL)
-                    try:
-                        #Finding urls in the search result web site.
-                        time.sleep(1)
-                        with urllib.request.urlopen(urllib.parse.quote_plus(linkURL, "/:?=&") ) as response:
-                            #body,encoding = None, None
-                            #body,encoding = conv_encoding(response.read() )
-                            try:
-                                body = response.read().decode('utf-8')
-                            except:
-                                print("DECODE ERR", file = sys.stderr)
-                                continue
-                            print(body)
-                            urls = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]+' , body )
-                            for url in urls:
-                                print(url.replace("https://", "").replace("http://", "") )
-                    
-                    except urllib.error.HTTPError:
-                        print("404", file=sys.stderr)
-    
-        except urllib.error.HTTPError:
-            print("404",file=sys.stderr)
+                #body,encoding = conv_encoding(response.read() )
+                body = driver.page_source
+                
+                urls = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]+' , body )
+                for url in urls:
+                    print(url.replace("https://", "").replace("http://", "") )
+            
+            except urllib.error.HTTPError:
+                print("404", file=sys.stderr)
+driver.quit()
