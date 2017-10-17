@@ -20,25 +20,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 from bs4 import BeautifulSoup
 
-#https://qiita.com/zarchis/items/3258562ebc9570fa05a3
-def conv_encoding(data):
-    lookup = ('utf_8', 'euc_jp', 'euc_jis_2004', 'euc_jisx0213',
-              'shift_jis', 'shift_jis_2004','shift_jisx0213',
-              'iso2022jp', 'iso2022_jp_1', 'iso2022_jp_2', 'iso2022_jp_3',
-              'iso2022_jp_ext','latin_1', 'ascii')
-    encode = None
-    for encoding in lookup:
-        try:
-            data = data.decode(encoding)
-            encode = encoding
-            break
-        except:
-            pass
-        if isinstance(data, unicode):
-            return data,encode
-    else:
-        raise LookupError
-
 maxPage = 1
 maxItems = 10
 targetSite = "github.com"
@@ -59,9 +40,7 @@ except EOFError:
 
 for domainName in domainNames:        
     for page in range(1,maxPage+1):
-        #time.sleep(1)
-        searchURL = "http://www.bing.com/search?q=%28site%3A"+targetSite+"%29+"+domainName+"&go=検索&qs=n&form=QBRE&filt=all&sp=-1&pq=%28site%3A"+targetSite+"%29+"+domainName+"&sc=0-24&sk=&cvid=71DD0548CAEF4EE2A40147845017D076"
-
+        searchURL = "https://www.google.co.jp/search?q="+ domainName +"/"+"&client=safari&rls=en&dcr=0&ei=oV_lWbqyD8ip0ATzzoLYBA&start="+ str( 10*(page-1) ) +"&sa=N&biw=973&bih=643&as_sitesearch=" + targetSite
         driver.get(searchURL)
         time.sleep(1.0)
                 
@@ -70,25 +49,29 @@ for domainName in domainNames:
         
         #Converting soup object.
         soup = BeautifulSoup(html, "html.parser")
-        searchResults = soup.find_all(class_ = "b_algo")
+        searchResults = soup.find_all(class_ = "g")
 
         #Checking each search result items.
         for searchResult in searchResults:
             #Checking snippet
-            snippet = (searchResult.find("p") ).string
+            #これはいらん理由は以下
+            #Googleは検索結果のスニペットでキーワードと一致している部分を<em>タグで囲んで強調文字にする
+            #そのためタグをstripしないと文字列の検索が正しくできない
+            #(英語でコメント書くのめんどくさい)
+            #snippet = (searchResult.find(class_ ="st") ).string
             #print(snippet)
-            urls = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]+' , snippet)
-            for url in urls:
-                print(url.replace("https://", "").replace("http://", "") )
+            #urls = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]+' , html )
+            #for url in urls:
+            #    print(url.replace("https://", "").replace("http://", "") )
             
             #Finding urls in the search result web site.
             linkURL = (searchResult.find("a")).get("href")
             print(linkURL, file=sys.stderr)
            
             driver.get(linkURL)
-            time.sleep(1)
+            #Time for web page loading and javascript rendering
+            time.sleep(0.5)
             
-            #body,encoding = conv_encoding(response.read() )
             body = driver.page_source
             
             urls = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]+' , body )
