@@ -10,7 +10,8 @@ Then it visits each web sites in search results, ans lists up short urls. The se
 ### shortURLCrawler-withGoogleSearch.py
 It has basicaly same function with "shortURLCrawler-withGCSE.py".  
 The difference is this program using Google Search but Google custom search API.  
-
+  
+** There is a robot detection in the Google search. Automated search request will be detected and impose a CAPTCHA.  **
 
 ## Installation
 Need python3.  
@@ -30,6 +31,7 @@ The result.txt contains so many duplications. Then, remove them.
 それを検索キーワードにして　Google Custom Searchで、Twitterを対象に検索してきます。一つのキーワードにつき、デフォルトでは1ページ分(10件の結果が載ってる)しか検索結果はもらっていません。  
 検索結果を1件ずつ訪れ、そのサイトの中に対象のドメイン名(与えられたドメイン名リスト全てが対象)を含むURLがないか探してきます。  
 25個の検索キーワードでTwitterを対象にすると4分30秒で重複を除いて240個の短縮URLが見つかりました。  
-
-
+  
+なおAPI使わない普通のGoogleSearchだと10秒空けてアクセスしていてもロボットだとバレてCAPTCHAを要求されます。  
+のでもっともっと時間を空けないとダメかも。  
 
