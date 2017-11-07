@@ -23,3 +23,10 @@ And get GoogleChrome v.59 or later from [here](https://www.google.com/chrome/bro
 
 ### For non-API version
 `$ pyhton3 goo.gl-BFA-nonAPI-headless.py`
+
+## Remarks
+メモ程度に...  
+goo.glのAPIの無料版は1秒に1リクエストまで。  
+APIなしで直にアクセスすると、時間をある程度開けたとしてもどうやって判断してるのか、そのうち応答してもらえなくなる。  
+
+bit.lyも同じ。torを使ってIPアドレス変えつつアクセスしてもダメ。goo.glはtorで試してないけど、GoogleはTorとかそういうの厳しそうなので多分同じ。  
