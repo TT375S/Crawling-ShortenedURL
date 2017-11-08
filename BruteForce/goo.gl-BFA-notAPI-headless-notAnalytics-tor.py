@@ -25,6 +25,9 @@ for i in string.ascii_lowercase[:26]:
 for i in string.ascii_uppercase[:26]:
     challengeChar.append(i)
 
+
+
+
 # run chrome headless
 options = Options()
 #options.add_argument('--headless')
@@ -37,6 +40,7 @@ options.add_argument('--proxy-server=socks5://localhost:9050')
 def bootBrawser():
 # install chromedriver if not found and start chrome
     rawDriver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=options)
+    #rawDriver = webdriver.Chrome( chrome_options=options)
     driver = SeleneDriver.wrap(rawDriver)
 
     driver.set_page_load_timeout(30)
@@ -48,6 +52,8 @@ for length in range(1, 20):
     #repeated permutation of [0-9a-zA-Z].
     challengeTexts = list(itertools.product(challengeChar, repeat=length) )
     
+    prevRetriedChallengeText = challengeTexts[0]
+        
     timeoutCount = 0
     for challengeText in challengeTexts:
         url = "http://goo.gl/"+ "".join(challengeText)
@@ -56,26 +62,48 @@ for length in range(1, 20):
             driver.get(url)
             print(url, file=sys.stderr)
             html = driver.page_source
-           
-             
-            #The short url is valid!
+            
+            #detected by robot detection
             if "try again" in html:
                 print("DETECTED", file = sys.stderr)
                 #reboot brawser
                 driver.quit()
                 (rawDriver, driver) = bootBrawser()
+                if not challengeText == prevRetriedChallengeText:
+                    #try again
+                    challengeTexts.insert(0, challengeText)
+                    prevRetriedChallengeText = challengeText
+                else:
+                    print("Failed retring",file = sys.stderr)
+            #The short url is valid!
             elif not "does not exist" in html:
                 print("HIT: " + rawDriver.current_url, file = sys.stderr)
-                print("".join(challengeText))
-                print(rawDriver.current_url)
+                print(url)
+                print(rawDriver.current_url, file = sys.stderr)
+                #destination URL
+                if len(sys.argv) = 2:
+                    f = open(sys.argv[1], "a")
+                    f.write(rawDriver.current_url)
+                    f.close()
+                    #short URL hit
+                    if len(sys.argv) = 3:
+                        f = open(sys.argv[1], "a")
+                        f.write(rawDriver.current_url)
+                        f.close()
         except TimeoutException:
             timeoutCount += 1
             try:
                 print("timeout: " + str(timeoutCount), file=sys.stderr)
-                print("caused by: "+ "".join(challengeText))
+                print("caused by: "+ "".join(challengeText), file = sys.stderr)
                 #Reboot headless
                 driver.quit()
                 (rawDriver, driver) = bootBrawser();
+                if not challengeText == prevRetriedChallengeText:
+                    #try again
+                    challengeTexts.insert(0, challengeText)
+                    prevRetriedChallengeText = challengeText
+                else:
+                    print("Failed retring", file = sys.stderr)
                 #print("timeout: " + rawDriver.current_url, file = sys.stderr) 
                 #print("".join(challengeText))
                 #print(rawDriver.current_url)
