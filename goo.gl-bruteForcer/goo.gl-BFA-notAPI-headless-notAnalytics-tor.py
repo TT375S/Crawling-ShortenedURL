@@ -56,18 +56,18 @@ for length in range(1, 20):
             driver.get(url)
             print(url, file=sys.stderr)
             html = driver.page_source
-            
+           
+             
             #The short url is valid!
-            if not "does not exist" in html:
-                print("HIT: " + rawDriver.current_url, file = sys.stderr)
-                print("".join(challengeText))
-                print(rawDriver.current_url)
-            elif "something wrong" in html:
+            if "try again" in html:
                 print("DETECTED", file = sys.stderr)
                 #reboot brawser
                 driver.quit()
                 (rawDriver, driver) = bootBrawser()
-
+            elif not "does not exist" in html:
+                print("HIT: " + rawDriver.current_url, file = sys.stderr)
+                print("".join(challengeText))
+                print(rawDriver.current_url)
         except TimeoutException:
             timeoutCount += 1
             try:
