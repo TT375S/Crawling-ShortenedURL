@@ -50,7 +50,7 @@ for length in range(1, 20):
     
     timeoutCount = 0
     for challengeText in challengeTexts:
-        url = "http://bit.ly/"+ "".join(challengeText)
+        url = "http://goo.gl/"+ "".join(challengeText)
         try:
             time.sleep(0.1)
             driver.get(url)
@@ -62,6 +62,12 @@ for length in range(1, 20):
                 print("HIT: " + rawDriver.current_url, file = sys.stderr)
                 print("".join(challengeText))
                 print(rawDriver.current_url)
+            elif "something wrong" in html:
+                print("DETECTED", file = sys.stderr)
+                #reboot brawser
+                driver.quit()
+                (rawDriver, driver) = bootBrawser()
+
         except TimeoutException:
             timeoutCount += 1
             try:
