@@ -81,14 +81,14 @@ for length in range(1, 20):
                 print(url)
                 print(rawDriver.current_url, file = sys.stderr)
                 #destination URL
-                if len(sys.argv) = 2:
+                if len(sys.argv) >= 2:
                     f = open(sys.argv[1], "a")
-                    f.write(rawDriver.current_url)
+                    f.write(rawDriver.current_url+"\n")
                     f.close()
                     #short URL hit
-                    if len(sys.argv) = 3:
-                        f = open(sys.argv[1], "a")
-                        f.write(rawDriver.current_url)
+                    if len(sys.argv) >= 3:
+                        f = open(sys.argv[2], "a")
+                        f.write(url+"\n")
                         f.close()
         except TimeoutException:
             timeoutCount += 1
