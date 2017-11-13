@@ -37,16 +37,17 @@ options.add_argument('--blink-settings=imagesEnabled=false')
 options.add_argument('--proxy-server=socks5://localhost:9050')
 #options.add_argument('--host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost"')
 
-def bootBrawser():
+def bootBrawser(path):
 # install chromedriver if not found and start chrome
-    rawDriver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=options)
+    rawDriver = webdriver.Chrome(executable_path=path, chrome_options=options)
     #rawDriver = webdriver.Chrome( chrome_options=options)
     driver = SeleneDriver.wrap(rawDriver)
 
     driver.set_page_load_timeout(30)
     return (rawDriver, driver)
 
-(rawDriver, driver) = bootBrawser();
+driverPath =ChromeDriverManager().install() 
+(rawDriver, driver) = bootBrawser(driverPath);
 
 for length in range(1, 20):
     #repeated permutation of [0-9a-zA-Z].
@@ -68,7 +69,7 @@ for length in range(1, 20):
                 print("DETECTED", file = sys.stderr)
                 #reboot brawser
                 driver.quit()
-                (rawDriver, driver) = bootBrawser()
+                (rawDriver, driver) = bootBrawser(driverPath)
                 if not challengeText == prevRetriedChallengeText:
                     #try again
                     challengeTexts.insert(0, challengeText)
@@ -97,7 +98,7 @@ for length in range(1, 20):
                 print("caused by: "+ "".join(challengeText), file = sys.stderr)
                 #Reboot headless
                 driver.quit()
-                (rawDriver, driver) = bootBrawser();
+                (rawDriver, driver) = bootBrawser(driverPath);
                 if not challengeText == prevRetriedChallengeText:
                     #try again
                     challengeTexts.insert(0, challengeText)
