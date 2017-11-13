@@ -28,21 +28,28 @@ for i in string.ascii_uppercase[:26]:
 # run chrome headless
 options = Options()
 #options.add_argument('--headless')
+
+#!!!!Some of dynamic web app won't work well with this option. It should be disabled!!!!
 #disable image loading
-options.add_argument('--blink-settings=imagesEnabled=false')
+#options.add_argument('--blink-settings=imagesEnabled=false')
+
 #use tor. Before running this script, boot tor service in your computer.
-options.add_argument('--proxy-server=socks5://localhost:9050')
+#options.add_argument('--proxy-server=socks5://localhost:9050')
+
 #options.add_argument('--host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost"')
 
-def bootBrawser():
+driverPath = ""
+
+def bootBrawser(path):
 # install chromedriver if not found and start chrome
-    rawDriver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=options)
+    rawDriver = webdriver.Chrome(executable_path=path, chrome_options=options)
     driver = SeleneDriver.wrap(rawDriver)
 
     driver.set_page_load_timeout(30)
     return (rawDriver, driver)
 
-(rawDriver, driver) = bootBrawser();
+driverPath = ChromeDriverManager().install()
+(rawDriver, driver) = bootBrawser(driverPath);
 
 for length in range(1, 20):
     #repeated permutation of [0-9a-zA-Z].
@@ -53,7 +60,10 @@ for length in range(1, 20):
         url = "http://bit.ly/"+ "".join(challengeText)
         try:
             time.sleep(0.1)
-            driver.get(url)
+            try:
+                driver.get(url)
+            except:
+                print("aaaa")    
             print(url, file=sys.stderr)
             html = driver.page_source
             
@@ -69,7 +79,7 @@ for length in range(1, 20):
                 print("caused by: "+ "".join(challengeText))
                 #Reboot headless
                 driver.quit()
-                (rawDriver, driver) = bootBrawser();
+                (rawDriver, driver) = bootBrawser(path);
                 #print("timeout: " + rawDriver.current_url, file = sys.stderr) 
                 #print("".join(challengeText))
                 #print(rawDriver.current_url)
