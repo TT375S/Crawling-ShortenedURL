@@ -38,7 +38,7 @@ options.add_argument('--headless')
 
 #options.add_argument('--host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost"')
 
-driverPath = ""
+driverPath = "2"
 
 def bootBrawser(path):
 # install chromedriver if not found and start chrome
@@ -51,22 +51,36 @@ def bootBrawser(path):
 driverPath = ChromeDriverManager().install()
 (rawDriver, driver) = bootBrawser(driverPath);
 
-for length in range(1, 20):
+skip_to_textTuple = ()
+
+#skip
+if len(sys.argv) >= 4:
+    skip_to_text = sys.argv[3]
+    for char in skip_to_text:
+        skip_to_textTuple += (char,)
+    print(skip_to_textTuple)
+
+
+for length in range(len("".join(skip_to_textTuple)), 20):
     #repeated permutation of [0-9a-zA-Z].
     challengeTexts = list(itertools.product(challengeChar, repeat=length) )
-    
+    #skip to the permutation
+    if length == len("".join(skip_to_textTuple)):
+        skip_to_index = challengeTexts.index(skip_to_textTuple)
+        del challengeTexts[0:skip_to_index]
+        print("skip to: " + "".join(skip_to_textTuple) + " at index:" + str(skip_to_index), file = sys.stderr)
     timeoutCount = 0
     for challengeText in challengeTexts:
+  
         url = "http://bit.ly/"+ "".join(challengeText)
         try:
             time.sleep(0.1)
             try:
                 driver.get(url)
+                print(url, file=sys.stderr)
+                html = driver.page_source
             except:
-                print("aaaa")    
-            print(url, file=sys.stderr)
-            html = driver.page_source
-            
+                print(traceback.format_exc()) 
             #The short url is valid!
             if not "does not exist" in html:
                 print("HIT: " + rawDriver.current_url, file = sys.stderr)
