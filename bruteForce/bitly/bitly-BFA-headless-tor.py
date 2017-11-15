@@ -27,7 +27,7 @@ for i in string.ascii_uppercase[:26]:
 
 # run chrome headless
 options = Options()
-#options.add_argument('--headless')
+options.add_argument('--headless')
 
 #!!!!Some of dynamic web app won't work well with this option. It should be disabled!!!!
 #disable image loading
@@ -72,6 +72,16 @@ for length in range(1, 20):
                 print("HIT: " + rawDriver.current_url, file = sys.stderr)
                 print("".join(challengeText))
                 print(rawDriver.current_url)
+                #destination URL
+                if len(sys.argv) >= 2:
+                    f = open(sys.argv[1], "a")
+                    f.write(rawDriver.current_url+"\n")
+                    f.close()
+                    #short URL hit
+                    if len(sys.argv) >= 3:
+                        f = open(sys.argv[2], "a")
+                        f.write(url+"\n")
+                        f.close()
         except TimeoutException:
             timeoutCount += 1
             try:
@@ -79,7 +89,7 @@ for length in range(1, 20):
                 print("caused by: "+ "".join(challengeText))
                 #Reboot headless
                 driver.quit()
-                (rawDriver, driver) = bootBrawser(path);
+                (rawDriver, driver) = bootBrawser(driverPath);
                 #print("timeout: " + rawDriver.current_url, file = sys.stderr) 
                 #print("".join(challengeText))
                 #print(rawDriver.current_url)
