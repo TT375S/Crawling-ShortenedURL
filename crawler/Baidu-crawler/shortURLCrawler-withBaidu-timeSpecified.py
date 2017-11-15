@@ -22,9 +22,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 from bs4 import BeautifulSoup
 
+#logFileName = "log"+ datetime.datetime.now().strftime('%Y-%m-%d--%H-%M-%S')  +".txt"
+
 maxPage = 10
 #weeks
-timeRange = 4
+timeRange = 8
 #4weeks * 12months * 2years
 limitTimeRange = 4 * 12 * 2
 
@@ -72,6 +74,7 @@ for domainName in domainNames:
 
     #searching  month by month
     while lowerLimit.timestamp() > limit.timestamp(): 
+        
         #set search period
         upperLimit = upperLimit - datetime.timedelta(weeks=timeRange)
         lowerLimit = upperLimit - datetime.timedelta(weeks=timeRange)
@@ -88,7 +91,9 @@ for domainName in domainNames:
 
         searchPageUrl = urllib.parse.urlunparse(parts)
         #print(searchPageUrl, file = sys.stderr)
-
+        
+        
+        prevUrlCountInThisPage = -1
         for page in range(1,maxPage+1):
             currentSearchPageUrl = searchPageUrl + "&pn=" + str(10*(page-1))
 
@@ -122,5 +127,9 @@ for domainName in domainNames:
             #Result is empty.
             if urlCountInThisPage == 0:
                 break
+            #Result is empty(SearchPage somtimes returns same page to different page number.)
+            if prevUrlCountInThisPage == urlCountInThisPage and not urlCountInThisPage == 10:
+                break
+            prevUrlCountInThisPage = urlCountInThisPage
         print(str(urlCount), file = sys.stderr)
 driver.quit()
