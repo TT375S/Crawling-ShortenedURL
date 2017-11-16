@@ -38,16 +38,28 @@ options.add_argument('--headless')
 
 #options.add_argument('--host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost"')
 
-driverPath = "2"
+def writeUrls(destUrl, shortUrl):
+    #destination URL
+    if len(sys.argv) >= 2:
+        f = open(sys.argv[1], "a")
+        f.write(destUrl+"\n")
+        f.close()
+        #short URL hit
+        if len(sys.argv) >= 3:
+            f = open(sys.argv[2], "a")
+            f.write(shortUrl+"\n")
+            f.close()
 
+driverPath = ""
 def bootBrawser(path):
-# install chromedriver if not found and start chrome
     rawDriver = webdriver.Chrome(executable_path=path, chrome_options=options)
     driver = SeleneDriver.wrap(rawDriver)
-
-    driver.set_page_load_timeout(30)
+    
+    #set timeout time
+    driver.set_page_load_timeout(15)
     return (rawDriver, driver)
 
+# install chromedriver if not found and start chrome
 driverPath = ChromeDriverManager().install()
 (rawDriver, driver) = bootBrawser(driverPath);
 
@@ -64,51 +76,51 @@ if len(sys.argv) >= 4:
 for length in range(len("".join(skip_to_textTuple)), 20):
     #repeated permutation of [0-9a-zA-Z].
     challengeTexts = list(itertools.product(challengeChar, repeat=length) )
-    #skip to the permutation
+    
+    #skip researched pattern (specified by CLI argument)
     if length == len("".join(skip_to_textTuple)):
         skip_to_index = challengeTexts.index(skip_to_textTuple)
         del challengeTexts[0:skip_to_index]
         print("skip to: " + "".join(skip_to_textTuple) + " at index:" + str(skip_to_index), file = sys.stderr)
+    
     timeoutCount = 0
     for challengeText in challengeTexts:
-  
+        print("".join(challengeText), file = sys.stderr)
+
         url = "http://bit.ly/"+ "".join(challengeText)
         try:
-            time.sleep(0.1)
-            try:
-                driver.get(url)
-                print(url, file=sys.stderr)
-                html = driver.page_source
-            except:
-                print(traceback.format_exc()) 
+            driver.get(url)
+            print(url, file=sys.stderr)
+            html = driver.page_source
+            
             #The short url is valid!
             if not "does not exist" in html:
                 print("HIT: " + rawDriver.current_url, file = sys.stderr)
                 print("".join(challengeText))
                 print(rawDriver.current_url)
-                #destination URL
-                if len(sys.argv) >= 2:
-                    f = open(sys.argv[1], "a")
-                    f.write(rawDriver.current_url+"\n")
-                    f.close()
-                    #short URL hit
-                    if len(sys.argv) >= 3:
-                        f = open(sys.argv[2], "a")
-                        f.write(url+"\n")
-                        f.close()
+                writeUrls(rawDriver.current_url, url)
         except TimeoutException:
             timeoutCount += 1
+            
+            print("timeout: " + str(timeoutCount), file=sys.stderr)
+            print("caused by: "+ "".join(challengeText), file = sys.stderr)
             try:
-                print("timeout: " + str(timeoutCount), file=sys.stderr)
-                print("caused by: "+ "".join(challengeText))
-                #Reboot headless
-                driver.quit()
-                (rawDriver, driver) = bootBrawser(driverPath);
-                #print("timeout: " + rawDriver.current_url, file = sys.stderr) 
-                #print("".join(challengeText))
-                #print(rawDriver.current_url)
-                continue
-            #For rawDriver.current_url . It causes another exception in case of bit.ly don't give any response.
-            except:
-                 print (traceback.format_exc())  
+                print(rawDriver.current_url, file = sys.stderr) 
+            
+                if "://" in rawDriver.current_url:
+                    writeUrls(rawDriver.current_url, url)
+            except TimeoutException:
+                print(traceback.format_exc()) 
+                continue 
+            #Reboot headless
+            driver.quit()
+            (rawDriver, driver) = bootBrawser(driverPath);
+            continue
+        except :
+            print(traceback.format_exc()) 
+            #Reboot headless
+            driver.quit()
+            (rawDriver, driver) = bootBrawser(driverPath);
+            continue
+          
 driver.quit()
