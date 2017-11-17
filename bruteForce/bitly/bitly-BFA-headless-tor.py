@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 import traceback
 import urllib.parse
 import urllib.request
@@ -24,6 +25,8 @@ for i in string.ascii_lowercase[:26]:
     challengeChar.append(i)
 for i in string.ascii_uppercase[:26]:
     challengeChar.append(i)
+
+logFileData = datetime.datetime.now().strftime('%Y-%m-%d--%H-%M-%S')
 
 # run chrome headless
 options = Options()
@@ -56,7 +59,7 @@ def bootBrawser(path):
     driver = SeleneDriver.wrap(rawDriver)
     
     #set timeout time
-    driver.set_page_load_timeout(15)
+    driver.set_page_load_timeout(1)
     return (rawDriver, driver)
 
 # install chromedriver if not found and start chrome
@@ -104,15 +107,20 @@ for length in range(len("".join(skip_to_textTuple)), 20):
             
             print("timeout: " + str(timeoutCount), file=sys.stderr)
             print("caused by: "+ "".join(challengeText), file = sys.stderr)
-            try:
-                current_url = rawDriver.current_url
-            except TimeoutException:
-                print(traceback.format_exc()) 
-            else:
-                print(current_url, file = sys.stderr) 
-                if "://" in current_url:
-                    writeUrls(current_url, url)
-                
+#            try:
+#                current_url = rawDriver.current_url
+#            except TimeoutException:
+#                print(traceback.format_exc())
+#            else:
+#                print(current_url, file = sys.stderr)
+#                if "://" in current_url:
+#                    writeUrls(current_url, url)
+
+            #log url cause timeout
+            f = open("timeOutURL" + logFileData + ".txt", "a")
+            f.write(url+"\n")
+            f.close()
+
             #Reboot headless
             driver.quit()
             (rawDriver, driver) = bootBrawser(driverPath);
