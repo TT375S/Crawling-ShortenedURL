@@ -136,6 +136,8 @@ for length in range(len("".join(skip_to_textTuple)), 20):
             else:
                 print("Failed retring", file = sys.stderr)
             continue
+        except KeyboardInterrupt:
+            exit()
         except :
             print(traceback.format_exc())
             #Reboot headless

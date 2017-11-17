@@ -141,11 +141,17 @@ for length in range(len("".join(skip_to_textTuple)), 20):
             else:
                 print("Failed retring", file = sys.stderr)
             continue
+        except KeyboardInterrupt:
+            exit()
         except :
             print(traceback.format_exc())
             #Reboot headless
             driver.quit()
             (rawDriver, driver) = bootBrawser(driverPath);
+            
+            f = open("exceptionURL" + logFileData + ".txt", "a")
+            f.write(url+"\n")
+            f.close()
             continue
 
 driver.quit()
