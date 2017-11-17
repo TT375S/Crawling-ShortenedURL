@@ -37,12 +37,11 @@ options.add_argument('--headless')
 #options.add_argument('--blink-settings=imagesEnabled=false')
 
 #use tor. Before running this script, boot tor service in your computer.
-options.add_argument('--proxy-server=socks5://localhost:9050')
+#options.add_argument('--proxy-server=socks5://localhost:9050')
 
 #options.add_argument('--host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost"')
 
 def writeUrls(destUrl, shortUrl):
-    #destination URL
     if len(sys.argv) >= 2:
         f = open(sys.argv[1], "a")
         f.write(destUrl+"\n")
@@ -99,7 +98,7 @@ for length in range(len("".join(skip_to_textTuple)), 20):
             html = driver.page_source
             
             #The short url is valid!
-            if not destinationUrl == "http://ow.li":
+            if not rawDriver.current_url == "http://ow.li":
                 print("HIT: " + rawDriver.current_url, file = sys.stderr)
                 print("".join(challengeText))
                 print(rawDriver.current_url)

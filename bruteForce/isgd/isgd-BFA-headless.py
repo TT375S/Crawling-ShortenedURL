@@ -37,7 +37,7 @@ options.add_argument('--headless')
 #options.add_argument('--blink-settings=imagesEnabled=false')
 
 #use tor. Before running this script, boot tor service in your computer.
-options.add_argument('--proxy-server=socks5://localhost:9050')
+#options.add_argument('--proxy-server=socks5://localhost:9050')
 
 #options.add_argument('--host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost"')
 
