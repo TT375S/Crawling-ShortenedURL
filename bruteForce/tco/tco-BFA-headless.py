@@ -27,7 +27,7 @@ for i in string.ascii_uppercase[:26]:
 
 # run chrome headless
 options = Options()
-#options.add_argument('--headless')
+options.add_argument('--headless')
 #disable image loading
 options.add_argument('--blink-settings=imagesEnabled=false')
 #use tor. Before running this script, boot tor service in your computer.
@@ -63,7 +63,11 @@ for length in range(1, 20):
             destinationUrl = rawDriver.current_url
 
             #This URL is valid!
-            if not "このページは存在しません" in html :
+            if  "このページは存在しません" in html :
+                continue
+            elif url == rawDriver.current_url:
+                continue
+            else:
                 print("HIT: " + rawDriver.current_url, file = sys.stderr)
                 print(url)
                 print(rawDriver.current_url, file = sys.stderr)

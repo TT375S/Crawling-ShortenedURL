@@ -27,7 +27,7 @@ for i in string.ascii_uppercase[:26]:
 
 # run chrome headless
 options = Options()
-#options.add_argument('--headless')
+options.add_argument('--headless')
 #disable image loading
 options.add_argument('--blink-settings=imagesEnabled=false')
 #use tor. Before running this script, boot tor service in your computer.

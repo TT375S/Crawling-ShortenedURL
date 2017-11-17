@@ -34,7 +34,7 @@ options.add_argument('--headless')
 #options.add_argument('--blink-settings=imagesEnabled=false')
 
 #use tor. Before running this script, boot tor service in your computer.
-#options.add_argument('--proxy-server=socks5://localhost:9050')
+options.add_argument('--proxy-server=socks5://localhost:9050')
 
 #options.add_argument('--host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost"')
 
@@ -105,13 +105,14 @@ for length in range(len("".join(skip_to_textTuple)), 20):
             print("timeout: " + str(timeoutCount), file=sys.stderr)
             print("caused by: "+ "".join(challengeText), file = sys.stderr)
             try:
-                print(rawDriver.current_url, file = sys.stderr) 
-            
-                if "://" in rawDriver.current_url:
-                    writeUrls(rawDriver.current_url, url)
+                current_url = rawDriver.current_url
             except TimeoutException:
                 print(traceback.format_exc()) 
-                continue 
+            else:
+                print(current_url, file = sys.stderr) 
+                if "://" in current_url:
+                    writeUrls(current_url, url)
+                
             #Reboot headless
             driver.quit()
             (rawDriver, driver) = bootBrawser(driverPath);
