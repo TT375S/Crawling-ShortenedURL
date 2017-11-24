@@ -10,7 +10,7 @@ import time
 import itertools
 import string
 
-#import 
+import domainSpecific
 
 from selenium import webdriver
 from selenium.webdriver import Chrome
@@ -29,7 +29,8 @@ class BruteforceDriver:
         driver.set_page_load_timeout(30)
         return (rawDriver, driver)
     
-    def __init__(self):
+    def __init__(self, agent):
+        self.domainAgent = agent
         self.challengeChar = []
         for i in range(0,10):
             self.challengeChar.append(str(i))
@@ -95,14 +96,14 @@ class BruteforceDriver:
             for challengeText in challengeTexts:
                 print("".join(challengeText), file = sys.stderr)
                 
-                url = "http://ow.ly/"+ "".join(challengeText)
+                url = self.domainAgent.url + "".join(challengeText)
                 try:
                     self.driver.get(url)
                     print(url, file=sys.stderr)
                     html = self.driver.page_source
                     
                     #The short url is valid!
-                    if not self.rawDriver.current_url == "http://ow.li/":
+                    if self.domainAgent.isValid(url, self.rawDriver.current_url, html):
                         print("HIT: " + self.rawDriver.current_url, file = sys.stderr)
                         print("".join(challengeText))
                         print(self.rawDriver.current_url)
@@ -145,5 +146,9 @@ class BruteforceDriver:
         self.driver.quit()
 
 if __name__ == '__main__':
-    mainDriver = BruteforceDriver()
+
+    domainAgent_class = getattr(domainSpecific, "owly")
+    domainAgent = domainAgent_class()
+
+    mainDriver = BruteforceDriver(domainAgent)
     mainDriver.main()
