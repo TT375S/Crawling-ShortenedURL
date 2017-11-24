@@ -9,8 +9,7 @@ import sys
 import time
 import itertools
 import string
-
-import domainSpecific
+import os
 
 from selenium import webdriver
 from selenium.webdriver import Chrome
@@ -19,6 +18,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
 from selene.driver import SeleneDriver
 from webdriver_manager.chrome import ChromeDriverManager
+
+import domainSpecific
 
 class BruteforceDriver:
     def bootBrawser(self, path):
@@ -58,23 +59,22 @@ class BruteforceDriver:
         (self.rawDriver, self.driver) = self.bootBrawser(self.driverPath);
         self.skip_to_textTuple = ()
 
-    def writeUrls(self, destUrl, shortUrl):
-        if len(sys.argv) >= 2:
-            f = open(sys.argv[1], "a")
-            f.write(destUrl+"\n")
+    @staticmethod
+    def writeLineOpenAndClose(fileName, mode, content):
+            f = open(fileName, mode)
+            f.write(content+"\n")
             f.close()
-            #short URL hit
-            if len(sys.argv) >= 3:
-                f = open(sys.argv[2], "a")
-                f.write(shortUrl+"\n")
-                f.close()
 
-
+    def writeUrls(self, destUrl, shortUrl):
+        if len(sys.argv) >= 3:
+            self.writeLineOpenAndClose(sys.argv[2], "a", destUrl)
+            if len(sys.argv) >= 4:
+                self.writeLineOpenAndClose(sys.argv[3], "a", shortUrl)
 
     def main(self):
         #skip
-        if len(sys.argv) >= 4:
-            skip_to_text = sys.argv[3]
+        if len(sys.argv) >= 5:
+            skip_to_text = sys.argv[4]
             for char in skip_to_text:
                 self.skip_to_textTuple += (char,)
             print(self.skip_to_textTuple)
@@ -146,8 +146,26 @@ class BruteforceDriver:
         self.driver.quit()
 
 if __name__ == '__main__':
+    #path = './'
 
-    domainAgent_class = getattr(domainSpecific, "owly")
+    #directories = []
+    #allItems = os.listdir(path)
+    #for x in os.listdir(path):  
+    #    if os.path.isdir(path + x):
+    #        directories.append(x)
+    #
+    #while directoryName in directories:
+    #    domainAgent_class = getattr(domainSpecific, "owly")
+    #    domainAgent = domainAgent_class()
+
+    #    mainDriver = BruteforceDriver(domainAgent)
+    #    mainDriver.main()
+    
+    if len(sys.argv) <= 1: 
+        print("Specify domain!")
+        exit()
+
+    domainAgent_class = getattr(domainSpecific, sys.argv[1])
     domainAgent = domainAgent_class()
 
     mainDriver = BruteforceDriver(domainAgent)
