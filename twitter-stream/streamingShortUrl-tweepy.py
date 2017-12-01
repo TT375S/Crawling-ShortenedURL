@@ -4,6 +4,7 @@ from tweepy.streaming import StreamListener
 import json
 import datetime
 import re
+import sys
 
 logFileData = datetime.datetime.now().strftime('%Y-%m-%d--%H-%M-%S')
 
@@ -31,22 +32,14 @@ class listener(StreamListener):
         except KeyError:
             print("keyError")
         else:
-            out = open('verizon_twitter_data.txt', 'a+')
-            tweet=tweet.encode('utf-8')
-            out.write(str(tweet)+"\n")
-            
-            print (tweet)
-            
-            out.close()
-        
-        #        for url in re.findall(
-        #                              'https?://[\w:%#\$&\?\(\)~\.=\+\-]+/[\w/:%#\$&\?\(\)~\.=\+\-]+',
-        #                              tweet):
-        #            print(url)
-        #            #write log
-        #            if len(sys.argv) >= 2:
-        #                f = open(sys.argv[1] + "-" + logFileData + ".txt", "a")
-        #                f.write(url + "\n")
+            for url in re.findall(
+                                      'https?://[\w:%#\$&\?\(\)~\.=\+\-]+/[\w/:%#\$&\?\(\)~\.=\+\-]+',
+                                      tweet):
+                print(url)
+                #write log
+                if len(sys.argv) >= 2:
+                    f = open(sys.argv[1] + "-" + logFileData + ".txt", "a")
+                    f.write(url + "\n")
         
         return True
 
