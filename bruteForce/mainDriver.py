@@ -67,9 +67,9 @@ class BruteforceDriver:
 
     def writeUrls(self, destUrl, shortUrl):
         if len(sys.argv) >= 3:
-            self.writeLineOpenAndClose(sys.argv[2], "a", destUrl)
+            self.writeLineOpenAndClose(sys.argv[2]+"-"+self.logFileData+".txt", "a", destUrl)
             if len(sys.argv) >= 4:
-                self.writeLineOpenAndClose(sys.argv[3], "a", shortUrl)
+                self.writeLineOpenAndClose(sys.argv[3]+"-"+self.logFileData+".txt", "a", shortUrl)
 
     def main(self):
         #skip
