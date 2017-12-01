@@ -5,6 +5,7 @@ import json
 import datetime
 import re
 import sys
+import http
 
 logFileData = datetime.datetime.now().strftime('%Y-%m-%d--%H-%M-%S')
 
@@ -16,13 +17,11 @@ except EOFError:
     pass
 
 
-
 # consumer key, consumer secret, access token, access secret.
 ckey  = ""
 csecret = ""
 atoken = ""
 asecret = ""
-
 
 class listener(StreamListener):
     def on_data(self, data):
@@ -32,6 +31,8 @@ class listener(StreamListener):
         except KeyError:
             print("keyError")
         else:
+            print(tweet)
+
             for url in re.findall(
                                       'https?://[\w:%#\$&\?\(\)~\.=\+\-]+/[\w/:%#\$&\?\(\)~\.=\+\-]+',
                                       tweet):
@@ -46,7 +47,22 @@ class listener(StreamListener):
     def on_error(self, status):
         print (status)
 
-auth = OAuthHandler(ckey, csecret)
-auth.set_access_token(atoken, asecret)
-twitterStream = Stream(auth, listener())
-twitterStream.filter(track=keywords, languages=["en"])
+def start_stream():
+    while True:
+        auth = OAuthHandler(ckey, csecret)
+        auth.set_access_token(atoken, asecret)
+        try:
+            twitterStream = Stream(auth, listener())
+            twitterStream.filter(track=keywords, languages=["en"])
+        except http.client.IncompleteRead:
+            print("IncompleteRead")
+            continue
+
+#In order to  catch ANY except by one try-catch...
+while True:
+    try:
+        start_stream()
+    except KeyInterrupt:
+        break
+    except:
+        continue
