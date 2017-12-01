@@ -2,6 +2,18 @@ from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 import json
+import datetime
+import re
+
+logFileData = datetime.datetime.now().strftime('%Y-%m-%d--%H-%M-%S')
+
+keywords = []
+try:
+    while (1):
+        keywords.append(input())
+except EOFError:
+    pass
+
 
 
 # consumer key, consumer secret, access token, access secret.
@@ -14,14 +26,28 @@ asecret = ""
 class listener(StreamListener):
     def on_data(self, data):
         all_data = json.loads(data)
-        tweet = all_data["text"]
-        out = open('verizon_twitter_data.txt', 'a+')
-        tweet=tweet.encode('utf-8')
-        out.write(str(tweet)+"\n")
-
-        print (tweet)
-
-        out.close()
+        try:
+            tweet = all_data["text"]
+        except KeyError:
+            print("keyError")
+        else:
+            out = open('verizon_twitter_data.txt', 'a+')
+            tweet=tweet.encode('utf-8')
+            out.write(str(tweet)+"\n")
+            
+            print (tweet)
+            
+            out.close()
+        
+        #        for url in re.findall(
+        #                              'https?://[\w:%#\$&\?\(\)~\.=\+\-]+/[\w/:%#\$&\?\(\)~\.=\+\-]+',
+        #                              tweet):
+        #            print(url)
+        #            #write log
+        #            if len(sys.argv) >= 2:
+        #                f = open(sys.argv[1] + "-" + logFileData + ".txt", "a")
+        #                f.write(url + "\n")
+        
         return True
 
     def on_error(self, status):
@@ -30,5 +56,4 @@ class listener(StreamListener):
 auth = OAuthHandler(ckey, csecret)
 auth.set_access_token(atoken, asecret)
 twitterStream = Stream(auth, listener())
-twitterStream.filter(track=['verizon', 'vzw','verizzon',    'vrizon','verizonfois',
-                        'verzon','verizun','vrzon','veerizon','verrizon', 'veriizon'], languages=["en"])
+twitterStream.filter(track=keywords, languages=["en"])
