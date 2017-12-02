@@ -34,4 +34,6 @@ goo.glはtor必須、応答返さなくなった時のブラウザの再起動�
   
 親フォルダbruteforceにあるmaindriver.pyがドライバプログラムで、domainSpecific.pyは短縮URLサービスごとの動作を規定している。  
 `$ python3 bitly dURL sURL 0000`  
-と打てば、サービスはbitlyで、転送先URLをdURLに、短縮URLをsURLに記録、0000から総当たりを開始、ということになる
+と打てば、サービスはbitlyで、転送先URLをdURLに、短縮URLをsURLに記録、0000から総当たりを開始、ということになる  
+  
+bit.lyはtor必要。is.gdもひつよう。tinyurl.comはtor使うと弾かれる？あとow.lyが変なエラーがでる
