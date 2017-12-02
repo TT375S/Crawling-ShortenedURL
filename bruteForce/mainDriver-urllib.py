@@ -2,7 +2,7 @@
 import datetime
 import traceback
 import urllib.parse
-import urllib.request
+#import urllib.request
 import urllib.error
 import re
 import sys
@@ -13,6 +13,8 @@ import os
 
 
 import domainSpecific
+
+
 
 #-Prepare tor (from https://stackoverflow.com/questions/711351/how-to-route-urllib-requests-through-the-tor-network)----
 import socks
@@ -33,6 +35,7 @@ socket.create_connection = create_connection_fixed_dns_leak
 
 from urllib import request
 #----
+#from urllib import request
 
 class BruteforceDriver:
     def __init__(self, agent):
@@ -87,8 +90,9 @@ class BruteforceDriver:
                 print("".join(challengeText), file = sys.stderr)
                 
                 url = self.domainAgent.url + "".join(challengeText)
+
+                req = request.Request(url)
                 try:
-                    req = request.Request(url)
                     res = request.urlopen(req)
 
                     destUrl = res.geturl()
@@ -124,10 +128,12 @@ class BruteforceDriver:
                     continue
                 except urllib.error.HTTPError:
                     print("httpError")
-                    self.writeLineOpenAndClose("404URL-" + self.logFileData + ".txt", "a", url)
-                    self.writeUrls(res.geturl(), url)
+                    print (traceback.format_exc())
                     
-                    continue
+                    #self.writeLineOpenAndClose("404URL-" + self.logFileData + ".txt", "a", url)
+                    #self.writeUrls("404", url)
+                    #
+                    #continue
                 except KeyboardInterrupt:
                     exit()
                 except :
