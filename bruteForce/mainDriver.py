@@ -62,10 +62,8 @@ class BruteforceDriver:
             f.close()
 
     def writeUrls(self, destUrl, shortUrl):
-        if len(sys.argv) >= 3:
-            self.writeLineOpenAndClose(sys.argv[2]+"-"+self.logFileData+".txt", "a", destUrl)
-            if len(sys.argv) >= 4:
-                self.writeLineOpenAndClose(sys.argv[3]+"-"+self.logFileData+".txt", "a", shortUrl)
+        self.writeLineOpenAndClose(self.domainAgent+ "dURL"+"-"+self.logFileData+".txt", "a", destUrl)
+        self.writeLineOpenAndClose(self.domainAgent+"sURL"+"-"+self.logFileData+".txt", "a", shortUrl)
 
     def main(self):
         #skip
@@ -178,13 +176,13 @@ if __name__ == '__main__':
         domainAgent_class = getattr(domainSpecific, domainName)
         domainAgent = domainAgent_class()
         
-        if domainName == "tinyurl":
+        if not domainName == "tinyurl":
             mainDriver = BruteforceDriver(domainAgent, challengeChar, True)
         else:
             mainDriver = BruteforceDriver(domainAgent, challengeChar, False)
 
         ps.append( Process(target=mainDriver.main, args=(), kwargs={}) )
-        ps[ps.size() -1].start()
+        ps[len(ps) -1].start()
 
     [p.join() for p in ps]
 
