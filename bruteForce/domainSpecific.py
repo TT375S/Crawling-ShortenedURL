@@ -50,4 +50,4 @@ class prtnu(baseDomainAgent):
         self.url = "http://prt.nu/"
     
     def isValid(self, shortURL, destURL, html):
-        return (not "このURLは有効ではありません" in html) and (not shortURL == destURL)
+        return (not "http://prt.nu/sorry.php" in destURL) and (not shortURL == destURL)
