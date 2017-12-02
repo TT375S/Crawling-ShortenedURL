@@ -15,14 +15,14 @@ class owly(baseDomainAgent):
         self.url = "http://ow.ly/"
     
     def isValid(self, shortURL, destURL, html):
-        return not shortURL == destURL
+        return (not shortURL == destURL) and (not destURL == "http://ow.li/")
 
 class bitly(baseDomainAgent):
     def __init__(self):
         self.url = "http://bit.ly/"
     
     def isValid(self, shortURL, destURL, html):
-        return  not "does not exist" in html
+        return  (not shortURL == destURL) and (not "does not exist" in html) 
 
 class tinyurl(baseDomainAgent):
     def __init__(self):
@@ -36,7 +36,7 @@ class isgd(baseDomainAgent):
         self.url = "http://is.gd/"
     
     def isValid(self, shortURL, destURL, html):
-        return not "The link you followed may be invalid" in html
+        return (not shortURL == destURL ) and (not "The link you followed may be invalid" in html)
 
 class tco(baseDomainAgent):
     def __init__(self):
@@ -50,4 +50,4 @@ class prtnu(baseDomainAgent):
         self.url = "http://prt.nu/"
     
     def isValid(self, shortURL, destURL, html):
-        return not "このURLは有効ではありません" in html
+        return (not "このURLは有効ではありません" in html) and (not shortURL == destURL)
