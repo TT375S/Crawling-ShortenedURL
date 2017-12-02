@@ -50,7 +50,7 @@ class BruteforceDriver:
         #options.add_argument('--blink-settings=imagesEnabled=false')
 
         #use tor. Before running this script, boot tor service in your computer.
-        #options.add_argument('--proxy-server=socks5://localhost:9050')
+        self.options.add_argument('--proxy-server=socks5://localhost:9050')
 
         #options.add_argument('--host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost"')
         self.driverPath = ""
@@ -121,6 +121,7 @@ class BruteforceDriver:
                     
                     #Reboot headless
                     self.driver.quit()
+                    self.rawDriver.quit()
                     (self.rawDriver, self.driver) = self.bootBrawser(self.driverPath);
                     
                     #Retry
@@ -137,6 +138,7 @@ class BruteforceDriver:
                     print(traceback.format_exc())
                     #Reboot headless
                     self.driver.quit()
+                    self.rawDriver.quit()
                     (self.rawDriver, self.driver) = self.bootBrawser(self.driverPath);
                     
                     f = open("exceptionURL" + self.logFileData + ".txt", "a")
