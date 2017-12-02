@@ -10,6 +10,7 @@ import time
 import itertools
 import string
 import os
+from multiprocessing import Process
 
 from selenium import webdriver
 from selenium.webdriver import Chrome
@@ -30,15 +31,9 @@ class BruteforceDriver:
         driver.set_page_load_timeout(30)
         return (rawDriver, driver)
     
-    def __init__(self, agent):
+    def __init__(self, agent, chars, useTor):
         self.domainAgent = agent
-        self.challengeChar = []
-        for i in range(0,10):
-            self.challengeChar.append(str(i))
-        for i in string.ascii_lowercase[:26]:
-            self.challengeChar.append(i)
-        for i in string.ascii_uppercase[:26]:
-            self.challengeChar.append(i)
+        self.challengeChar = chars
 
         self.logFileData = datetime.datetime.now().strftime('%Y-%m-%d--%H-%M-%S')
 
@@ -50,7 +45,8 @@ class BruteforceDriver:
         #options.add_argument('--blink-settings=imagesEnabled=false')
 
         #use tor. Before running this script, boot tor service in your computer.
-        self.options.add_argument('--proxy-server=socks5://localhost:9050')
+        if useTor:
+            self.options.add_argument('--proxy-server=socks5://localhost:9050')
 
         #options.add_argument('--host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost"')
         self.driverPath = ""
@@ -162,13 +158,33 @@ if __name__ == '__main__':
 
     #    mainDriver = BruteforceDriver(domainAgent)
     #    mainDriver.main()
+    challengeChar = []
+    for i in range(0,10):
+        challengeChar.append(str(i))
+    for i in string.ascii_lowercase[:26]:
+        challengeChar.append(i)
+    for i in string.ascii_uppercase[:26]:
+        challengeChar.append(i)
     
-    if len(sys.argv) <= 1: 
-        print("Specify domain!")
-        exit()
 
-    domainAgent_class = getattr(domainSpecific, sys.argv[1])
-    domainAgent = domainAgent_class()
+    #if len(sys.argv) <= 1: 
+    #    print("Specify domain!")
+    #    exit()
 
-    mainDriver = BruteforceDriver(domainAgent)
-    mainDriver.main()
+    domains = ["bitly", "isgd","owly", "prtnu", "tco", "tinyurl"]
+    
+    ps = []
+    for domainName in domains:
+        domainAgent_class = getattr(domainSpecific, domainName)
+        domainAgent = domainAgent_class()
+        
+        if domainName == "tinyurl":
+            mainDriver = BruteforceDriver(domainAgent, challengeChar, True)
+        else:
+            mainDriver = BruteforceDriver(domainAgent, challengeChar, False)
+
+        ps.append( Process(target=mainDriver.main, args=(), kwargs={}) )
+        ps[ps.size() -1].start()
+
+    [p.join() for p in ps]
+
