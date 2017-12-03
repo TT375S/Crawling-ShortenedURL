@@ -46,7 +46,7 @@ try:
                 url = input()
             except EOFError:
                 break
-            print(url, file=sys.stderr)
+            #print(url, file=sys.stderr)
             
             #validation URL form
             if  len(re.findall('(https?:\/\/)[^\s ]+' , url)) <= 0:
@@ -61,17 +61,19 @@ try:
 
         checkerURL = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=" + APIKey
         request = urllib.request.Request(checkerURL, data=json_data, method=method, headers=headers)
+        print("requesting...", file=sys.stderr)
         try:
             with urllib.request.urlopen(request) as response:
                 body = response.read().decode('utf-8') 
                 #URL is unsafe!!!
                 if "threat" in body:
                     print(body)
+                    print("threat!", file=sys.stderr)
             if lineCount != 500:
                 exit()
         except urllib.error.HTTPError:
             print("404",file=sys.stderr)
 except EOFError:
+    print(str(urlCount) + " " + str(unsafeURLcount) + " " + str(unsafeURLcount/urlCount), sys.stderr)
     pass
 
-print(str(urlCount) + " " + str(unsafeURLcount) + " " + str(unsafeURLcount/urlCount), sys.stderr)
