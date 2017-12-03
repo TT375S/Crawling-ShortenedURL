@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import traceback
 import time
 import urllib.parse
 import re
@@ -20,9 +20,11 @@ try:
         #validation URL form
         if  len(re.findall('(?:https?:\/\/|)[^\s ]+\/[0-9a-zA-Z]*' , domain)) <= 0:
             continue
-
-        url = "http://" + domain
-        print(url, file=sys.stderr)
+        if "://" in domain:
+            url = domain
+        else :
+            url = "http://" + domain
+        #print(url, file=sys.stderr)
 
         urlCount += 1
 
@@ -43,6 +45,14 @@ try:
             print("404")
             _404count += 1
         except urllib.error.URLError:
+            print (traceback.format_exc())
+            pass
+        except KeyboardInterrupt:
+            print (traceback.format_exc())
+            break
+        except:
+            print (traceback.format_exc())
+            print(url, file=sys.stderr)
             pass
         
 except EOFError:
