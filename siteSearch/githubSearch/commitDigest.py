@@ -1,17 +1,17 @@
 import sys
 import json
 import re
-inputFileName = "repository.txt"
+inputFileName = "logCommit.txt"
 
 if len(sys.argv) >=2:
     inputFileName = sys.argv[1]
 
 f = open(inputFileName)
-jsonData = json.load(f)
+jsonData = json.load(sys.stdin)
 f.close()
 
 items = jsonData["items"]
-
+print("items:" + str(len(items)) )
 for item in items:
     commit = item["commit"]
     commitMessage = commit["message"]
