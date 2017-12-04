@@ -23,25 +23,31 @@ csecret = ""
 atoken = ""
 asecret = ""
 
+
+
 class listener(StreamListener):
     def on_data(self, data):
         all_data = json.loads(data)
         try:
             tweet = all_data["text"]
+            #write URLs
+            entities = all_data["entities"]
+            urlDicts = entities["urls"]
+            for urlDict in urlDicts:
+                sURL = urlDict["url"] 
+                dURL = urlDict["expanded_url"]
+                print(sURL)
+                print(dURL)
+                
+                fs = open("sURL" + "-" + logFileData + ".txt", "a")
+                fs.write(sURL + "\n")
+                fd = open("dURL" + "-" + logFileData + ".txt", "a")
+                fd.write(dURL + "\n")
+
         except KeyError:
             print("keyError")
         else:
-            print(tweet)
-
-            for url in re.findall(
-                                      'https?://[\w:%#\$&\?\(\)~\.=\+\-]+/[\w/:%#\$&\?\(\)~\.=\+\-]+',
-                                      tweet):
-                print(url)
-                #write log
-                if len(sys.argv) >= 2:
-                    f = open(sys.argv[1] + "-" + logFileData + ".txt", "a")
-                    f.write(url + "\n")
-        
+            pass        
         return True
 
     def on_error(self, status):
