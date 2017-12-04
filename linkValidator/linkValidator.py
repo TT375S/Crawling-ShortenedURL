@@ -1,14 +1,37 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+#-Prepare tor (from https://stackoverflow.com/questions/711351/how-to-route-urllib-requests-through-the-tor-network)----
+import socks
+import socket
+
+# This function has no DNS resolve
+# it need to use the real ip adress to connect instead of www.google.com
+def create_connection_fixed_dns_leak(address, timeout=None, source_address=None):
+    sock = socks.socksocket()
+    sock.connect(address)
+    return sock
+
+# MUST BE SET BEFORE IMPORTING URLLIB
+socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 9050)
+# patch the socket module
+socket.socket = socks.socksocket
+socket.create_connection = create_connection_fixed_dns_leak
+
+from urllib import request
+#----
+
 import traceback
 import time
 import urllib.parse
 import re
 import sys
 import urllib.response
-import urllib.request
+#import urllib.request
 import urllib.error
 import urllib.parse
+
+
 
 validURLcount = 0
 urlCount = 0
