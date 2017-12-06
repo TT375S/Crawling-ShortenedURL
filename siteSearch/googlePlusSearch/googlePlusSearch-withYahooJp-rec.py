@@ -93,13 +93,17 @@ for domainName in domainNames:
             searchResultHeads = soup.find_all(class_ = "hd") 
             for searchResultHead in searchResultHeads:
                 foundURL = searchResultHead.find_all("a")[0].get("href")
-                driver.get(foundURL)
-                body = driver.page_source
-                linkURLs = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]+' , body)
-                for linkURL in linkURLs:
-                    urlCountInThisPage += 1
-                    urlCount += 1
-                    print(linkURL.replace("https://", "").replace("http://", "") )
+                try:
+                    driver.get(foundURL)
+                except:
+                    break
+                else:
+                    body = driver.page_source
+                    linkURLs = re.findall('(?:https?:\/\/|)'+ domainName  +'\/[0-9a-zA-Z]+' , body)
+                    for linkURL in linkURLs:
+                        urlCountInThisPage += 1
+                        urlCount += 1
+                        print(linkURL.replace("https://", "").replace("http://", "") )
                 
             #Checking each search result items.
             for searchResult in searchResults:
