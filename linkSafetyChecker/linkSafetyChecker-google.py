@@ -29,8 +29,8 @@ try:
                 "clientVersion": "1.5.2"
             },
             "threatInfo": {
-                "threatTypes":      ["MALWARE", "SOCIAL_ENGINEERING"],
-                "platformTypes":    ["WINDOWS"],
+                "threatTypes":      ["MALWARE", "SOCIAL_ENGINEERING", "THREAT_TYPE_UNSPECIFIED", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
+                "platformTypes":    ["WINDOWS", "PLATFORM_TYPE_UNSPECIFIED", "LINUX", "ANDROID", "OSX", "IOS", "CHROME"],
                 "threatEntryTypes": ["URL"],
                 "threatEntries": [
                     #{"url": "http://aaa"},
