@@ -31,7 +31,7 @@ import jsonpickle
 import os
 
 searchQuery = 'http'  # this is what we're searching for
-maxTweets = 10000000  # Some arbitrary large number
+maxTweets = 1000  # Some arbitrary large number
 tweetsPerQry = 100    # this is the max the API permits
 fName = "tweets"+logFileData+".txt"  # We'll store the tweets in a text file.
 
