@@ -87,6 +87,7 @@ for domainName in domainNames:
             #Converting soup object.
             soup = BeautifulSoup(html, "html.parser")
             searchResults = soup.find_all(class_ = "bd")
+            urlCountInThisPage = 0
             
             #visit each found sites to collect short URL
             searchResultHeads = soup.find_all(class_ = "hd") 
@@ -100,7 +101,6 @@ for domainName in domainNames:
                     urlCount += 1
                     print(linkURL.replace("https://", "").replace("http://", "") )
                 
-            urlCountInThisPage = 0
             #Checking each search result items.
             for searchResult in searchResults:
                 
