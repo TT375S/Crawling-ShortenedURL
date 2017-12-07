@@ -1,16 +1,23 @@
 import sys
+import re
 
 lengths = [0 for i in range(100)]
 
-offset = 0
-if len(sys.argv) >= 2:
-    offset = len(sys.argv[1])
-else:
-    print("default offset is 0", file=sys.stderr)
+domain ="" 
 
+if len(sys.argv) >= 2:
+    domain = sys.argv[1]
+else:
+    print("specify domain!", file=sys.stderr)
+    exit()
 try:
     while(1):
-        length = len(input()) - offset
+        currentText = input()
+        urlPath = re.sub("(?:https?:\/\/|)"+domain +"\/", "", currentText)
+        length = len(urlPath)
+        #print(urlPath)
+        if length == 1:
+            print(currentText, file=sys.stderr)
         #print("len:" + str(length))
         lengths[length] += 1
 except EOFError:
