@@ -64,7 +64,7 @@ class BruteforceDriver:
         for length in range(len("".join(self.skip_to_textTuple)), 20):
             #repeated permutation of [0-9a-zA-Z].
             challengeTexts = list(itertools.product(self.challengeChar, repeat=length) )
-            
+
             prevRetriedChallengeText = challengeTexts[0]
             
             #skip researched pattern (specified by CLI argument)
@@ -72,12 +72,18 @@ class BruteforceDriver:
                 skip_to_index = challengeTexts.index(self.skip_to_textTuple)
                 del challengeTexts[0:skip_to_index]
                 print("skip to: " + "".join(self.skip_to_textTuple) + " at index:" + str(skip_to_index), file = sys.stderr)
-            
-            timeoutCount = 0
+
+            challengeStrings = []
             for challengeText in challengeTexts:
-                print("".join(challengeText), file = sys.stderr)
+                challengeStrings.append("".join(challengeText))
+            
+            del challengeTexts
+
+            timeoutCount = 0
+            for challengeText in challengeStrings:
+                print(challengeText, file = sys.stderr)
                 
-                url = self.domainAgent.url + "".join(challengeText)
+                url = self.domainAgent.url + challengeText
 
                 try:
                     cmdResultLines = res_cmd_no_lfeed("curl --socks5-hostname localhost:9050 -I " + url)
@@ -90,22 +96,12 @@ class BruteforceDriver:
                             print(url, file=sys.stderr)
                             
                             print("HIT: " + destUrl, file = sys.stderr)
-                            print("".join(challengeText))
+                            print(challengeText)
                             self.writeUrls(destUrl, url)
                             break
 
                 #TODO: change 
                 except KeyError:
-                    timeoutCount += 1
-                    
-                    print("timeout: " + str(timeoutCount), file=sys.stderr)
-                    print("caused by: "+ "".join(challengeText), file = sys.stderr)
-                    
-                    #log url cause timeout
-                    f = open("timeOutURL" + self.logFileData + ".txt", "a")
-                    f.write(url+"\n")
-                    f.close()
-                    
                     #Retry
                     if not challengeText == prevRetriedChallengeText:
                         #try again
