@@ -1,0 +1,86 @@
+user1@user1MBP [木 12 07 00:18:13] :~/github/Crawling-ShortenedURL/siteSearch/googlePlusSearch
+$ time python3 googlePlusSearch-withYahooJp-rec.py > recLog.txt
+bit.ly
+bit.ly
+2008/09/25 ~ 2017/12/07
+2017/10/12 ~ 2017/12/07
+7666
+2017/08/17 ~ 2017/10/12
+14377
+2017/06/22 ~ 2017/08/17
+20699
+2017/04/27 ~ 2017/06/22
+28350
+2017/03/02 ~ 2017/04/27
+33120
+2017/01/05 ~ 2017/03/02
+37196
+2016/11/10 ~ 2017/01/05
+44013
+2016/09/15 ~ 2016/11/10
+50118
+2016/07/21 ~ 2016/09/15
+54103
+2016/05/26 ~ 2016/07/21
+58824
+2016/03/31 ~ 2016/05/26
+64496
+2016/02/04 ~ 2016/03/31
+69319
+2015/12/10 ~ 2016/02/04
+75277
+2015/10/15 ~ 2015/12/10
+80198
+2015/08/20 ~ 2015/10/15
+84574
+2015/06/25 ~ 2015/08/20
+89879
+2015/04/30 ~ 2015/06/25
+95380
+2015/03/05 ~ 2015/04/30
+100093
+2015/01/08 ~ 2015/03/05
+104617
+2014/11/13 ~ 2015/01/08
+110195
+2014/09/18 ~ 2014/11/13
+115380
+2014/07/24 ~ 2014/09/18
+120791
+2014/05/29 ~ 2014/07/24
+126393
+2014/04/03 ~ 2014/05/29
+131560
+2014/02/06 ~ 2014/04/03
+136103
+2013/12/12 ~ 2014/02/06
+^CTraceback (most recent call last):
+  File "googlePlusSearch-withYahooJp-rec.py", line 80, in <module>
+    driver.get(currentSearchPageUrl)
+  File "/usr/local/lib/python3.6/site-packages/selene/common/delegation.py", line 6, in delegator
+    return getattr(self.__delegate__, name)(*args, **kwargs)  # pragma: no cover
+  File "/usr/local/lib/python3.6/site-packages/selenium/webdriver/remote/webdriver.py", line 245, in get
+    self.execute(Command.GET, {'url': url})
+  File "/usr/local/lib/python3.6/site-packages/selenium/webdriver/remote/webdriver.py", line 231, in execute
+    response = self.command_executor.execute(driver_command, params)
+  File "/usr/local/lib/python3.6/site-packages/selenium/webdriver/remote/remote_connection.py", line 395, in execute
+    return self._request(command_info[0], url, body=data)
+  File "/usr/local/lib/python3.6/site-packages/selenium/webdriver/remote/remote_connection.py", line 425, in _request
+    self._conn.request(method, parsed_url.path, body, headers)
+  File "/usr/local/Cellar/python3/3.6.3/Frameworks/Python.framework/Versions/3.6/lib/python3.6/http/client.py", line 1239, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "/usr/local/Cellar/python3/3.6.3/Frameworks/Python.framework/Versions/3.6/lib/python3.6/http/client.py", line 1250, in _send_request
+    self.putrequest(method, url, **skips)
+  File "/usr/local/Cellar/python3/3.6.3/Frameworks/Python.framework/Versions/3.6/lib/python3.6/http/client.py", line 1108, in putrequest
+    raise CannotSendRequest(self.__state)
+http.client.CannotSendRequest: Request-sent
+Exception ignored in: <bound method Service.__del__ of <selenium.webdriver.chrome.service.Service object at 0x109ca0898>>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/selenium/webdriver/common/service.py", line 151, in __del__
+  File "/usr/local/lib/python3.6/site-packages/selenium/webdriver/common/service.py", line 127, in stop
+  File "/usr/local/lib/python3.6/site-packages/selenium/webdriver/common/service.py", line 98, in send_remote_shutdown_command
+ImportError: sys.meta_path is None, Python is likely shutting down
+
+real	506m5.827s
+user	4m40.143s
+sys	0m37.161s
