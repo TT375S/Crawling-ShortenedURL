@@ -1,10 +1,10 @@
 # Crawling-ShortenedURL
-Crawling twitter, github, etc… and collection short URL.
-
+Short URL collection  programs.  
+  
 For more details, see README.md in each directories of crawler.  
-
+  
 # Installation
-Need Python3 and selenium, and GoogleChrome.  
+Need Python3 and selenium, and GoogleChrome for below example.  
 ## For Mac
 
 Install python3.  
@@ -40,9 +40,9 @@ Clone this repository.
 `$ git clone https://github.com/TT375S/Crawling-ShortenedURL.git`   
 
 # Example Usage
-Collect short URL from twitter.  
+Collect short URL from twitter. It collects short URL by scraping twitter search page.  
 
-    $ python3 ./twitter-crawler/twitterCrawl-allDomain.py < serviceList-domain.txt > shortURLfromTwitter.txt
+    $ python3 ./crawler/twitter-crawler/twitterCrawl-allDomain.py < serviceList-domain.txt > shortURLfromTwitter.txt
     https://twitter.com/search?q=tinyurl.com&src=typd
     171
     https://twitter.com/search?q=bit.ly&src=typd
@@ -52,6 +52,7 @@ Collect short URL from twitter.
 
 The output file(shortURLfromTwitter.txt) is ...
 
+    $ cat ./crawler/twitter-crawler/shortURLfromTwitter.txt
     Checking for mac64 chromedriver:2.33 in cache
     There is no cached driver. Downloading new one...
     tinyurl.com/yckvuxoq
@@ -71,6 +72,7 @@ Then, validate short url and list their destination.
 
 The output file(linkDestination.txt) is ...
 
+    $ cat linkDestination.txt
     https://www.ichibata.co.jp/railway/topics/2017/10/511615511.html
     https://mainichigahakken.net/hobby/article/post-88.php
     http://xn--q9js249txe1ans9a.com/119/
@@ -78,9 +80,10 @@ The output file(linkDestination.txt) is ...
     ...
 
 
-Finally, check safety.
+Finally, check safety of URLs. 
 
     $ python3 ./linkSafetyChecker/linkSafetyChecker-google.py "YOURAPIKEY" < linkDestination.txt > unsafeList.txt
 It's return JSON. (Google API's raw response body)
-
+  
+It returns JSON of treat infomation if there are some URL in the input file matches Google's threat URL lists.
 

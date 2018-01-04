@@ -1,9 +1,11 @@
 # Brute forcing and collecting short URL from goo.gl
 Brute forcgin from https://goo.gl/000 to  https://goo.gl/ZZZZZZZZZZ, and collecting valid URL.  
-Although it sleeps only 0.05sec every roop, it's too slow.
 
 ## Installation
-### For using API version
+mainDriver.py needs Python3 and GoogleChrome.  
+mainDriver-urllib.py need only Python3.  
+mainDriver-curl-header.py need only Pyhton3, too.
+<!-- ### For using API version
 Need only python3.  
 
 ### For non-API version
@@ -23,7 +25,13 @@ And get GoogleChrome v.59 or later from [here](https://www.google.com/chrome/bro
 
 ### For non-API version
 `$ pyhton3 goo.gl-BFA-nonAPI-headless.py`
+-->
 
+## Usage
+    $ <driverFile> <shortURLserviceName> <destinationURLFileName> <shortURLFileName> <startPattern>
+  
+If you want to bruteforce by using CURL command, and to short URL service "bit.ly", and output destination URL file "dURL-2017-09-01-...txt" and short URL file "sURL-2017-09-01-...txt", and start bruteforce from "aabc", then you should hit ...  
+    $ ./mainDriver-curl-header.py bitly dURL sURL aabc
 ## Remarks
 メモ程度に...  
 goo.glのAPIの無料版は1秒に1リクエストまで。  
@@ -36,4 +44,4 @@ goo.glはtor必須、応答返さなくなった時のブラウザの再起動�
 `$ python3 bitly dURL sURL 0000`  
 と打てば、サービスはbitlyで、転送先URLをdURLに、短縮URLをsURLに記録、0000から総当たりを開始、ということになる  
   
-bit.lyはtor必要。is.gdもひつよう。tinyurl.comはtor使うと弾かれる？あとow.lyが変なエラーがでる
+bit.lyはtor必要。is.gdもひつよう。tinyurl.comはtor使うと弾かれる？あとow.lyが変なエラーがでる?
