@@ -17,7 +17,8 @@ Execute. And input keyword "http".
     $ ./streamingShortUrl-tweepy.py 
     http
   
-If you want to collect only "bit.ly", execute "streamingShortUrl-tweepy-forBitly.py".
+If you want to collect only "bit.ly", execute 
+    $ ./streamingShortUrl-tweepy-filtered.py bit.ly
 
 ### shor URL lengths
 `$ python3 ./urlLengthCount.py < targetFile.txt`
