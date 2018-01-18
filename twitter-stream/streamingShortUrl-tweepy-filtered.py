@@ -77,7 +77,7 @@ def start_stream():
 while True:
     try:
         start_stream()
-    except KeyInterrupt:
+    except KeyboardInterrupt:
         break
     except:
         continue
