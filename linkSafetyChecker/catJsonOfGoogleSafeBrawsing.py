@@ -3,7 +3,7 @@ import sys;
 
 for fileInd in range(1, len(sys.argv)):
     with open(sys.argv[fileInd],'r') as f:
-        
+                
         #print(sys.argv[fileInd])
         lineNum = 0
         lines = f.readlines()
@@ -12,8 +12,11 @@ for fileInd in range(1, len(sys.argv)):
         #print(num_lines)
         #print(f.readlines()[1])
         
+        if num_lines >= 1 and fileInd >=2:
+            print(",")
+
         startLine = 0
-        endLine = num_lines-1 -2
+        endLine = num_lines-1 -1
         if fileInd >= 2:
             startLine = 2
              
