@@ -20,7 +20,7 @@ APIKey = sys.argv[1]
 method = "POST"
 headers = {"Content-Type" : "application/json"}
 
-requestCount = 0
+returnResultCount = 0
 
 while(1):
     
@@ -63,13 +63,13 @@ while(1):
     checkerURL = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=" + APIKey
     request = urllib.request.Request(checkerURL, data=json_data, method=method, headers=headers)
     print("requesting...", file=sys.stderr)
-    requestCount += 1
     try:
         with urllib.request.urlopen(request) as response:
             body = response.read().decode('utf-8') 
             #URL is unsafe!!!
             if "threat" in body:
-                if requestCount == 1:
+                returnResultCount += 1
+                if returnResultCount == 1:
                     print(body[0:len(body)-1 -5])
                 else:
                     #concatenate json
@@ -79,7 +79,7 @@ while(1):
                 print("threat!", file=sys.stderr)
         if lineCount != 500:
             #terminate json
-            if requestCount != 0:
+            if returnResultCount != 0:
                 print("] }")
             exit()
     except urllib.error.HTTPError:
