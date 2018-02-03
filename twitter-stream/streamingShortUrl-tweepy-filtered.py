@@ -25,20 +25,24 @@ except EOFError:
 
 
 # consumer key, consumer secret, access token, access secret.
-ckey  = ""
-csecret = ""
-atoken = ""
-asecret = ""
-
+ckey  = "yvGzO2"
+csecret = "MWuOw5GDo"
+atoken = "93DCQ"
+asecret = "ak5"
 
 class listener(StreamListener):
     def on_data(self, data):
+        #print(data)
+        #print("DATAEND")
+
         all_data = json.loads(data)
+        
         try:
             tweet = all_data["text"]
             #write URLs
             entities = all_data["entities"]
             urlDicts = entities["urls"]
+            tweetId = all_data["id_str"]
             for urlDict in urlDicts:
                 sURL = urlDict["url"] 
                 dURL = urlDict["expanded_url"]
@@ -52,7 +56,9 @@ class listener(StreamListener):
                 fs.write(sURL + "\n")
                 fd = open("dURL" + "-" + logFileData + ".txt", "a")
                 fd.write(dURL + "\n")
-
+                fd = open("id" + "-" + logFileData + ".txt", "a")
+                fd.write(tweetId + "\n")
+    
         except KeyError:
             print("keyError")
         else:

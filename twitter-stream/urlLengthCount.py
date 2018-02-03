@@ -1,7 +1,7 @@
 import sys
 import re
 
-lengths = [0 for i in range(100)]
+lengths = [0 for i in range(500)]
 
 domain ="" 
 
@@ -16,7 +16,7 @@ try:
         urlPath = re.sub("(?:https?:\/\/|)"+domain +"\/", "", currentText)
         length = len(urlPath)
         #print(urlPath)
-        if length == 1:
+        if length != 10:
             print(currentText, file=sys.stderr)
         #print("len:" + str(length))
         lengths[length] += 1
